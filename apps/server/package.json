@@ -1,0 +1,38 @@
+{
+  "name": "@frpos/server",
+  "version": "1.0.0",
+  "main": "src/index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "generate-migrations": "bun drizzle-kit generate:mysql --schema=./src/db/schema",
+    "execute-migrations": "bun run src/scripts/migrations.ts",
+    "debug": "bun --inspect src/index.ts",
+    "dev": "partykit dev",
+    "deploy": "partykit deploy"
+  },
+  "dependencies": {
+    "@clerk/backend": "^0.29.2",
+    "@elysiajs/bearer": "^0.7.0",
+    "@elysiajs/cookie": "^0.7.0",
+    "@elysiajs/cors": "^0.7.0",
+    "@elysiajs/jwt": "^0.7.0",
+    "@elysiajs/trpc": "^0.7.0",
+    "@elysiajs/websocket": "^0.2.8",
+    "@planetscale/database": "^1.11.0",
+    "@trpc/server": "^10.38.4",
+    "@types/cookies": "^0.7.8",
+    "cookies": "^0.8.0",
+    "devalue": "^4.3.2",
+    "drizzle-orm": "^0.28.6",
+    "elysia": "latest",
+    "elysia-clerk": "^0.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "superjson": "^1.13.1"
+  },
+  "devDependencies": {
+    "bun-types": "latest",
+    "drizzle-kit": "^0.19.13",
+    "partykit": "^0.0.23"
+  },
+  "module": "src/index.js"
+}

@@ -1,0 +1,25 @@
+{
+  "name": "frpos",
+  "module": "index.ts",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently \"bun run dev:server\" \"bun run dev:client\"",
+    "dev:server": "cd apps/server && bun dev",
+    "dev:client": "cd apps/client && bun dev",
+    "clean": "rm -rf node_modules apps/server/node_modules apps/client/node_modules bun.lockb apps/server/bun.lockb apps/client/bun.lockb"
+  },
+  "workspaces": [
+    "apps/*"
+  ],
+  "devDependencies": {
+    "@frpos/server": "workspace:*",
+    "bun-types": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "concurrently": "^8.2.1"
+  }
+}
