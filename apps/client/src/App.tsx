@@ -46,6 +46,7 @@ function App() {
   const { isSignedIn, user } = useUser();
   const { getToken } = useAuth();
   const [currentOrg, setCurrentOrg] = useState<string>();
+  const [zReport, setZReport] = useState<any>();
 
   // const handleClick = async () => {
   //   client.add.mutate(undefined, { orgId: currentOrg });
@@ -142,7 +143,9 @@ function App() {
         window.location.reload();
       });
       conn?.addEventListener("message", (e) => {
-        console.log("message");
+        console.log("message", e.data);
+        const data = JSON.parse(e.data);
+        setZReport(data.zReport);
         document.querySelector("#json")!.innerHTML = JSON.stringify(e.data);
       });
     });
@@ -169,6 +172,28 @@ function App() {
 
   const PARTYKIT_HOST = "http://localhost:1999";
 
+  if (zReport === undefined) return <div>loading...</div>;
+  if (zReport === null)
+    return (
+      <div>
+        <button
+          onClick={() => {
+            const url = new URL(`${PARTYKIT_HOST}/parties/main/${currentOrg}`);
+            fetch(url, {
+              method: "POST",
+              credentials: "include",
+              body: JSON.stringify({
+                usecase: "open_z_report",
+                payload: {},
+              }),
+            });
+          }}
+        >
+          Open day
+        </button>
+      </div>
+    );
+
   return (
     <div>
       <UserButton />
@@ -186,12 +211,11 @@ function App() {
           // url.searchParams.set("payload", JSON.stringify({ id: name }));
 
           fetch(url, {
-            method: "PATCH",
+            method: "POST",
             credentials: "include",
             body: JSON.stringify({
-              usecase: "update_zone",
+              usecase: "create_bill",
               payload: {
-                id,
                 name,
               },
             }),

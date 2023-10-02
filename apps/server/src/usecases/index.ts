@@ -1,9 +1,45 @@
 import { Organization, User } from "../entities";
-import { createZoneUsecase } from "./zones/create";
-import { deleteZoneUsecase } from "./zones/delete";
-import { getZoneUsecase } from "./zones/get";
-import { getZonesUsecase } from "./zones/get-all";
-import { updateZoneUsecase } from "./zones/update";
+import {
+  DELETE_ZONES_USECASES,
+  GET_ZONES_USECASES,
+  PATCH_ZONES_USECASES,
+  POST_ZONES_USECASES,
+} from "./zones";
+import {
+  DELETE_CATEGORIES_USECASES,
+  GET_CATEGORIES_USECASES,
+  PATCH_CATEGORIES_USECASES,
+  POST_CATEGORIES_USECASES,
+} from "./categories";
+import {
+  DELETE_TABLES_USECASES,
+  GET_TABLES_USECASES,
+  PATCH_TABLES_USECASES,
+  POST_TABLES_USECASES,
+} from "./tables";
+import {
+  DELETE_PRODUCTS_USECASES,
+  GET_PRODUCTS_USECASES,
+  PATCH_PRODUCTS_USECASES,
+  POST_PRODUCTS_USECASES,
+} from "./products";
+import {
+  DELETE_Z_REPORTS_USECASES,
+  GET_Z_REPORTS_USECASES,
+  PATCH_Z_REPORTS_USECASES,
+  POST_Z_REPORTS_USECASES,
+} from "./z-reports";
+import {
+  DELETE_BILLS_USECASES,
+  GET_BILLS_USECASES,
+  PATCH_BILLS_USECASES,
+  POST_BILLS_USECASES,
+} from "./bills";
+import {
+  GET_BILLS_PRODUCTS_USECASES,
+  PATCH_BILLS_PRODUCTS_USECASES,
+  POST_BILLS_PRODUCTS_USECASES,
+} from "./bills-products";
 
 export type InputUsecase<T> = Omit<T, "organization"> & {
   user: User;
@@ -22,30 +58,39 @@ type MethodsUsecases = Record<
 >;
 export const METHODS_USECASES: MethodsUsecases = {
   GET: {
-    get_zone: {
-      fn: getZoneUsecase,
-    },
-    get_zones: {
-      fn: getZonesUsecase,
-    },
+    ...GET_ZONES_USECASES,
+    ...GET_CATEGORIES_USECASES,
+    ...GET_TABLES_USECASES,
+    ...GET_PRODUCTS_USECASES,
+    ...GET_Z_REPORTS_USECASES,
+    ...GET_BILLS_USECASES,
+    ...GET_BILLS_PRODUCTS_USECASES,
   },
   POST: {
-    create_zone: {
-      fn: createZoneUsecase,
-      needsToBroadcast: true,
-    },
+    ...POST_ZONES_USECASES,
+    ...POST_CATEGORIES_USECASES,
+    ...POST_TABLES_USECASES,
+    ...POST_PRODUCTS_USECASES,
+    ...POST_Z_REPORTS_USECASES,
+    ...POST_BILLS_USECASES,
+    ...POST_BILLS_PRODUCTS_USECASES,
   },
   PATCH: {
-    update_zone: {
-      fn: updateZoneUsecase,
-      needsToBroadcast: true,
-    },
+    ...PATCH_ZONES_USECASES,
+    ...PATCH_CATEGORIES_USECASES,
+    ...PATCH_TABLES_USECASES,
+    ...PATCH_PRODUCTS_USECASES,
+    ...PATCH_Z_REPORTS_USECASES,
+    ...PATCH_BILLS_USECASES,
+    ...PATCH_BILLS_PRODUCTS_USECASES,
   },
   PUT: {},
   DELETE: {
-    delete_zone: {
-      fn: deleteZoneUsecase,
-      needsToBroadcast: true,
-    },
+    ...DELETE_ZONES_USECASES,
+    ...DELETE_CATEGORIES_USECASES,
+    ...DELETE_TABLES_USECASES,
+    ...DELETE_PRODUCTS_USECASES,
+    ...DELETE_Z_REPORTS_USECASES,
+    ...DELETE_BILLS_USECASES,
   },
 };

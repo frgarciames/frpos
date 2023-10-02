@@ -13,11 +13,11 @@ import { billsProducts } from "./bills_products";
 
 export const products = mysqlTable("products", {
   id: bigint("id", { mode: "number" }).primaryKey().autoincrement(),
-  name: varchar("name", { length: 256 }),
+  name: varchar("name", { length: 256 }).notNull(),
   image: varchar("image", { length: 256 }),
   price: float("price"),
   stock: int("stock"),
-  categoryId: bigint("category_id", { mode: "number" }),
+  categoryId: bigint("category_id", { mode: "number" }).notNull(),
   ...auditColumns,
 });
 

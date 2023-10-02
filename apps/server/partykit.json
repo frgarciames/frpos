@@ -1,4 +1,4 @@
 {
   "name": "frpos",
-  "main": "src/party.ts"
+  "main": "src/app.ts"
 }

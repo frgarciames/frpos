@@ -1,12 +1,16 @@
 import { PlanetScaleDatabase } from "drizzle-orm/planetscale-serverless";
 import { AbstractRepository } from "./abstract";
 import { bills } from "../db/schema/bills";
-import { Bill } from "../entities";
+import { Bill, NewBill } from "../entities";
 import { eq } from "drizzle-orm";
 import { billsProducts } from "../db/schema/bills_products";
 import { products } from "../db/schema/products";
 
-export class BillsRepository extends AbstractRepository<typeof bills, Bill> {
+export class BillsRepository extends AbstractRepository<
+  typeof bills,
+  Bill,
+  NewBill
+> {
   constructor(db: PlanetScaleDatabase<Record<string, never>>) {
     super(db, bills);
   }

@@ -10,7 +10,17 @@ import { ZReportsRepository } from "./repositories/z_reports";
 import Database from "./db/Database";
 import { getParamsFromRequest } from "./utils";
 import { METHODS_USECASES, Methods } from "./usecases";
-import { Organization, User } from "./entities";
+import { getZonesUsecase } from "./usecases/zones/get-all";
+import { getCategoriesUsecase } from "./usecases/categories/get-all";
+import { getBillsWithProductsByZReportUsecase } from "./usecases/bills-products/get-bills-with-products-by-zreport";
+import { getOpenZReportUsecase } from "./usecases/z-reports/get-open";
+
+const defaultHeaders = {
+  "Access-Control-Allow-Origin": "http://localhost:5173",
+  "Access-Control-Allow-Headers": "Content-Type, Authorization",
+  "Access-Control-Allow-Credentials": "true",
+  "Access-Control-Allow-Methods": "GET, POST, DELETE, PATCH, OPTIONS",
+};
 
 type Repositories =
   | "categoriesRepository"
@@ -59,12 +69,48 @@ export default class Server implements Party.Server {
     connection: Party.Connection,
     { request }: Party.ConnectionContext
   ) {
-    const organizationId = request.headers.get("X-Org-ID");
-    const zones = await this.repositories.zonesRepository.getAll({
-      by: "organization",
-      value: organizationId,
+    const organizationId = request.headers.get("X-Org-ID") as string;
+    const userInOrganization = await organizationUser(request, {
+      id: this.party.id,
+      env: this.party.env,
     });
-    connection.send(JSON.stringify(zones));
+    if (!userInOrganization) {
+      return;
+    }
+    const openZReport = await getOpenZReportUsecase(this.repositories)({
+      organization: userInOrganization.organization.organization,
+      user: userInOrganization.user,
+    });
+    if (!openZReport) {
+      connection.send(
+        JSON.stringify({
+          zReport: null,
+        })
+      );
+      return;
+    }
+    const bills = await getBillsWithProductsByZReportUsecase({
+      billsProductsRepository: this.repositories.billsProductsRepository,
+    })({
+      organization: userInOrganization.organization.organization,
+      user: userInOrganization.user,
+      zReportId: openZReport.id,
+    });
+    // const zones = await getZonesUsecase(this.repositories)({
+    //   organization: userInOrganization.organization.organization,
+    //   user: userInOrganization.user,
+    //   nested: true,
+    // });
+    // const categories = await getCategoriesUsecase(this.repositories)({
+    //   organization: userInOrganization.organization.organization,
+    //   user: userInOrganization.user,
+    // });
+    connection.send(
+      JSON.stringify({
+        zReport: openZReport,
+        bills,
+      })
+    );
   }
 
   // onMessage(
@@ -80,12 +126,6 @@ export default class Server implements Party.Server {
   }
 
   async onRequest(request: Party.Request) {
-    const defaultHeaders = {
-      "Access-Control-Allow-Origin": "http://localhost:5173",
-      "Access-Control-Allow-Headers": "Content-Type, Authorization",
-      "Access-Control-Allow-Credentials": "true",
-      "Access-Control-Allow-Methods": "GET, POST, DELETE, PATCH, OPTIONS",
-    };
     if (request.method === "OPTIONS") {
       return new Response(undefined, {
         status: 200,
@@ -114,11 +154,12 @@ export default class Server implements Party.Server {
     try {
       const result = await fn(this.repositories)({
         ...payload,
-        ...userInOrganization,
+        ...userInOrganization.organization,
+        user: userInOrganization.user,
       });
 
       if (needsToBroadcast) {
-        this.party.broadcast(JSON.stringify(result));
+        this.party.broadcast(JSON.stringify({ usecase, payload: result }));
       }
       return new Response(JSON.stringify(result), {
         status: 200,

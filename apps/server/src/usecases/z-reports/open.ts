@@ -1,42 +1,23 @@
-import { BillsRepository } from "../../repositories/bills";
-import { ZReportsRepository } from "../../repositories/z_reports";
+import { ZReportsRepository } from "@/repositories/z_reports";
+import { InputUsecase } from "..";
+import { OrganizationNotFoundError } from "@/domain/errors/organization";
 
 type ZReportsUsecasesProps = {
   zReportsRepository: ZReportsRepository;
 };
-type OpenZReportInput = {
-  organization: string;
-};
+type OpenZReportInput = InputUsecase<{}>;
 export const openZReportUsecase =
   ({ zReportsRepository }: ZReportsUsecasesProps) =>
   async ({ organization }: OpenZReportInput) => {
+    if (!organization) throw OrganizationNotFoundError();
     const existingZReport = await zReportsRepository.getOpenZReport(
-      organization
+      organization.id
     );
     if (existingZReport) throw new Error("There is already an open z report");
-    const createdZReport = await zReportsRepository.create({
-      organization,
+    await zReportsRepository.create({
+      organization: organization.id,
       dateStart: new Date(),
       dateEnd: null,
     });
-    return createdZReport;
-  };
-
-type GetZReportUsecaseInput = {
-  organization: string;
-};
-type GetZReportUsecaseProps = ZReportsUsecasesProps & {
-  billsRepository: BillsRepository;
-};
-export const getOpenZReportUsecase =
-  ({ zReportsRepository, billsRepository }: GetZReportUsecaseProps) =>
-  async ({ organization }: GetZReportUsecaseInput) => {
-    let zReport = await zReportsRepository.getOpenZReport(organization);
-    if (!zReport) {
-      zReport = await openZReportUsecase({ zReportsRepository })({
-        organization,
-      });
-    }
-    const relations = await billsRepository.getBillsByZReport(zReport.id);
-    return relations;
+    return zReportsRepository.getOpenZReport(organization.id);
   };

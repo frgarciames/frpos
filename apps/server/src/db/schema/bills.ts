@@ -7,7 +7,7 @@ import { billsProducts } from "./bills_products";
 
 export const bills = mysqlTable("bills", {
   id: bigint("id", { mode: "number" }).primaryKey().autoincrement(),
-  state: mysqlEnum("state", ["open", "printed", "closed"]),
+  state: mysqlEnum("state", ["open", "printed", "closed"]).default("open"),
   deleted: boolean("deleted").default(false),
   zReportId: bigint("z_report_id", { mode: "number" }).notNull(),
   tableId: bigint("table_id", { mode: "number" }),

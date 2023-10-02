@@ -1,25 +1,30 @@
-import { NewCategory } from "../../entities";
-import { CategoriesRepository } from "../../repositories/categories";
+import { InputUsecase } from "..";
+import { AlreadyExistsError } from "@/domain/errors/exists";
+import { OrganizationNotFoundError } from "@/domain/errors/organization";
+import { NewCategory } from "@/entities";
+import { CategoriesRepository } from "@/repositories/categories";
 
-type CategoriesUsecasesProps = {
+type CategoriesRepositoryProps = {
   categoriesRepository: CategoriesRepository;
 };
-type CreateCategoryInput = NewCategory;
+type CreateCategoryInput = InputUsecase<NewCategory>;
 export const createCategoryUsecase =
-  ({ categoriesRepository }: CategoriesUsecasesProps) =>
-  async ({ organization, name, createdBy }: CreateCategoryInput) => {
-    if (!organization || !name) throw new Error("Organization is required");
-    const existingCategory = await categoriesRepository.getCategoryByName(
-      organization,
-      name
-    );
-    if (existingCategory) {
-      throw new Error("There is already a category with this name");
-    }
-    const createdCategory = await categoriesRepository.create({
-      organization,
+  ({ categoriesRepository }: CategoriesRepositoryProps) =>
+  async ({ organization, name, user }: CreateCategoryInput) => {
+    if (!organization) throw OrganizationNotFoundError();
+    const existingCategory = await categoriesRepository.getBy({
+      organization: organization.id,
       name,
-      createdBy,
     });
-    return createdCategory;
+    if (existingCategory.length > 0) {
+      throw AlreadyExistsError("Category", name);
+    }
+    await categoriesRepository.create({
+      organization: organization.id,
+      name,
+      createdBy: user.id,
+    });
+    return categoriesRepository.getBy({
+      organization: organization.id,
+    });
   };

@@ -1,7 +1,7 @@
 import { InputUsecase } from "..";
-import { NotFoundError } from "../../domain/errors/not-found";
-import { OrganizationNotFoundError } from "../../domain/errors/organization";
-import { ZonesRepository } from "../../repositories/zones";
+import { NotFoundError } from "@/domain/errors/not-found";
+import { OrganizationNotFoundError } from "@/domain/errors/organization";
+import { ZonesRepository } from "@/repositories/zones";
 
 type ZonesRepositoryProps = {
   zonesRepository: ZonesRepository;

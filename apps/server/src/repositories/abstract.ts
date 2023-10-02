@@ -23,12 +23,6 @@ export class AbstractRepository<
     return result[0];
   };
 
-  getAll = (filter?: { by: string; value: string }) => {
-    const result = this.db.select().from(this.table);
-    if (!filter) return result;
-    return result.where(eq(this.table[filter.by], filter.value));
-  };
-
   getBy = (filters: Partial<Entity>) => {
     return this.db
       .select()
@@ -49,16 +43,14 @@ export class AbstractRepository<
     return result;
   };
 
-  create = async (table: NewEntity) => {
-    const result = await this.db.insert(this.table).values(table as any);
-    return this.get(Number(result.insertId));
+  create = (table: NewEntity) => {
+    return this.db.insert(this.table).values(table as any);
   };
 
-  update = async (table: Partial<Entity> & { id: number }) => {
-    const result = await this.db
+  update = (table: Partial<Entity> & { id: number }) => {
+    return this.db
       .update(this.table)
       .set(table)
       .where(eq(this.table.id, table.id));
-    return this.get(Number(result.insertId));
   };
 }

@@ -1,12 +1,13 @@
 import { PlanetScaleDatabase } from "drizzle-orm/planetscale-serverless";
 import { AbstractRepository } from "./abstract";
 import { zReports } from "../db/schema/z_reports";
-import { ZReport } from "../entities";
+import { NewZReport, ZReport } from "../entities";
 import { eq, isNull } from "drizzle-orm";
 
 export class ZReportsRepository extends AbstractRepository<
   typeof zReports,
-  ZReport
+  ZReport,
+  NewZReport
 > {
   constructor(db: PlanetScaleDatabase<Record<string, never>>) {
     super(db, zReports);

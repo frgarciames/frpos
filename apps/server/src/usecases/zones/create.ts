@@ -1,8 +1,8 @@
 import { InputUsecase } from "..";
-import { AlreadyExistsError } from "../../domain/errors/exists";
-import { OrganizationNotFoundError } from "../../domain/errors/organization";
-import { NewZone } from "../../entities";
-import { ZonesRepository } from "../../repositories/zones";
+import { AlreadyExistsError } from "@/domain/errors/exists";
+import { OrganizationNotFoundError } from "@/domain/errors/organization";
+import { NewZone } from "@/entities";
+import { ZonesRepository } from "@/repositories/zones";
 
 type ZonesRepositoryProps = {
   zonesRepository: ZonesRepository;
@@ -24,8 +24,5 @@ export const createZoneUsecase =
       name,
       createdBy: user.id,
     });
-    return zonesRepository.getAll({
-      by: "organization",
-      value: organization.id,
-    });
+    return zonesRepository.getZonesWithTables(organization.id);
   };

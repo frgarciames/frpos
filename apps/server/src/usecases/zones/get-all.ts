@@ -1,17 +1,21 @@
 import { InputUsecase } from "..";
-import { OrganizationNotFoundError } from "../../domain/errors/organization";
-import { ZonesRepository } from "../../repositories/zones";
+import { OrganizationNotFoundError } from "@/domain/errors/organization";
+import { ZonesRepository } from "@/repositories/zones";
 
 type ZonesRepositoryProps = {
   zonesRepository: ZonesRepository;
 };
-type GetZonesInput = InputUsecase<{}>;
+type GetZonesInput = InputUsecase<{
+  nested?: boolean;
+}>;
 export const getZonesUsecase =
   ({ zonesRepository }: ZonesRepositoryProps) =>
-  async ({ organization }: GetZonesInput) => {
+  async ({ organization, nested }: GetZonesInput) => {
     if (!organization) throw OrganizationNotFoundError();
-    const zones = await zonesRepository.getBy({
-      organization: organization.id,
-    });
-    return zones;
+    if (!nested) {
+      return zonesRepository.getBy({
+        organization: organization.id,
+      });
+    }
+    return zonesRepository.getZonesWithTables(organization.id);
   };

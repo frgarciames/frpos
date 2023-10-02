@@ -1,4 +1,5 @@
 import { relations } from "drizzle-orm";
+import { auditColumns } from "../audit";
 import {
   bigint,
   int,
@@ -16,6 +17,7 @@ export const billsProducts = mysqlTable(
     billId: bigint("bill_id", { mode: "number" }).notNull(),
     quantity: int("quantity").notNull(),
     overrides: json("overrides"),
+    ...auditColumns,
   },
   (t) => ({
     pk: primaryKey(t.productId, t.billId),

@@ -8,12 +8,16 @@ import { zones } from "../db/schema/zones";
 import { categories } from "../db/schema/categories";
 import { tables } from "../db/schema/tables";
 import { zReports } from "../db/schema/z_reports";
+import { billsProducts } from "@/db/schema/bills_products";
 
 export type User = ClerkUser;
 export type Organization = ClerkOrganization;
 
 export type Bill = typeof bills.$inferSelect;
 export type NewBill = typeof bills.$inferInsert;
+
+export type BillProduct = typeof billsProducts.$inferSelect;
+export type NewBillProduct = typeof billsProducts.$inferInsert;
 
 export type Product = typeof products.$inferSelect;
 export type NewProduct = typeof products.$inferInsert;
