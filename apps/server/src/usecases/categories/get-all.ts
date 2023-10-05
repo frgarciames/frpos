@@ -5,13 +5,19 @@ import { CategoriesRepository } from "@/repositories/categories";
 type CategoriesRepositoryProps = {
   categoriesRepository: CategoriesRepository;
 };
-type GetCategoriesInput = InputUsecase<{}>;
+type GetCategoriesInput = InputUsecase<{
+  nested?: boolean;
+}>;
 export const getCategoriesUsecase =
   ({ categoriesRepository }: CategoriesRepositoryProps) =>
-  async ({ organization }: GetCategoriesInput) => {
+  async ({ organization, nested = false }: GetCategoriesInput) => {
     if (!organization) throw OrganizationNotFoundError();
-    const categories = await categoriesRepository.getBy({
-      organization: organization.id,
-    });
-    return categories;
+    if (!nested) {
+      return await categoriesRepository.getBy({
+        organization: organization.id,
+      });
+    }
+    return await categoriesRepository.getCategoriesWithProducts(
+      organization.id
+    );
   };

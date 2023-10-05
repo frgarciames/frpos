@@ -89,6 +89,16 @@ export default class Server implements Party.Server {
       );
       return;
     }
+    const categories = await getCategoriesUsecase(this.repositories)({
+      organization: userInOrganization.organization.organization,
+      nested: true,
+      user: userInOrganization.user,
+    });
+    const zones = await getZonesUsecase(this.repositories)({
+      organization: userInOrganization.organization.organization,
+      nested: true,
+      user: userInOrganization.user,
+    });
     const bills = await getBillsWithProductsByZReportUsecase({
       billsProductsRepository: this.repositories.billsProductsRepository,
     })({
@@ -108,6 +118,8 @@ export default class Server implements Party.Server {
     connection.send(
       JSON.stringify({
         zReport: openZReport,
+        zones,
+        categories,
         bills,
       })
     );
@@ -143,7 +155,10 @@ export default class Server implements Party.Server {
       });
     }
     const { usecase, payload } = await getParamsFromRequest(request);
-    const methodUsecase = METHODS_USECASES[request.method as Methods];
+    const methodUsecase = METHODS_USECASES[request.method as Methods] as Record<
+      string,
+      any
+    >;
     if (!methodUsecase || !usecase || !methodUsecase[usecase]) {
       return new Response("Method not allowed", {
         status: 405,

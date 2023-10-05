@@ -28,31 +28,12 @@ export const addProductToBillUsecase =
     if (!organization) throw OrganizationNotFoundError();
     if (!billId) throw MissingParamsError({ billId });
     if (!productId) throw MissingParamsError({ productId });
-    const existingRow = await billsProductsRepository.getBy({
-      billId,
-      productId,
-    });
     const bill = await billsRepository.getBy({
       id: billId,
     });
     const getItemsUsecase = getBillsWithProductsByZReportUsecase({
       billsProductsRepository,
     });
-    if (existingRow.length > 0) {
-      await billsProductsRepository.updateRow({
-        billId,
-        productId,
-        quantity: existingRow[0].quantity + quantity,
-        updatedAt: new Date(),
-        updatedBy: user.id,
-        overrides,
-      });
-      return getItemsUsecase({
-        organization,
-        user,
-        zReportId: bill[0].zReportId,
-      });
-    }
     await billsProductsRepository.create({
       billId,
       productId,

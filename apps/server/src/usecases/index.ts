@@ -56,7 +56,7 @@ type MethodsUsecases = Record<
     }
   >
 >;
-export const METHODS_USECASES: MethodsUsecases = {
+export const METHODS_USECASES = {
   GET: {
     ...GET_ZONES_USECASES,
     ...GET_CATEGORIES_USECASES,
@@ -94,3 +94,15 @@ export const METHODS_USECASES: MethodsUsecases = {
     ...DELETE_BILLS_USECASES,
   },
 };
+
+type DeletesUsecases = keyof (typeof METHODS_USECASES)["DELETE"];
+type GetUsecases = keyof (typeof METHODS_USECASES)["GET"];
+type PostUsecases = keyof (typeof METHODS_USECASES)["POST"];
+type PatchUsecases = keyof (typeof METHODS_USECASES)["PATCH"];
+type PutUsecases = keyof (typeof METHODS_USECASES)["PUT"];
+export type Usecase =
+  | DeletesUsecases
+  | GetUsecases
+  | PostUsecases
+  | PatchUsecases
+  | PutUsecases;
