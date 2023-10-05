@@ -9,7 +9,7 @@ export const bills = mysqlTable("bills", {
   id: bigint("id", { mode: "number" }).primaryKey().autoincrement(),
   state: mysqlEnum("state", ["open", "printed", "closed"]).default("open"),
   deleted: boolean("deleted").default(false),
-  paymentMethod: mysqlEnum("payment_method", ["cash", "card"]).notNull(),
+  paymentMethod: mysqlEnum("payment_method", ["cash", "card"]),
   zReportId: bigint("z_report_id", { mode: "number" }).notNull(),
   tableId: bigint("table_id", { mode: "number" }),
   ...auditColumns,

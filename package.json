@@ -4,13 +4,15 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "concurrently \"bun run dev:server\" \"bun run dev:client\"",
+    "dev": "concurrently \"bun run dev:server\" \"bun run dev:native\" \"bun run dev:web\"",
     "dev:server": "cd apps/server && bun dev",
-    "dev:client": "cd apps/client && bun dev",
-    "clean": "rm -rf node_modules apps/server/node_modules apps/client/node_modules bun.lockb apps/server/bun.lockb apps/client/bun.lockb"
+    "dev:native": "cd apps/native && bun start",
+    "dev:web": "cd apps/web && bun dev",
+    "clean": "rm -rf node_modules apps/server/node_modules apps/web/node_modules apps/native/node_modules bun.lockb apps/server/bun.lockb apps/web/bun.lockb apps/native/bun.lockb"
   },
   "workspaces": [
-    "apps/*"
+    "apps/*",
+    "packages/*"
   ],
   "devDependencies": {
     "@frpos/server": "workspace:*",

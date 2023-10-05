@@ -1,0 +1,1 @@
+ALTER TABLE `bills` MODIFY COLUMN `payment_method` enum('cash','card');
