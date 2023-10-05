@@ -28,6 +28,15 @@ export class BillsProductsRepository extends AbstractRepository<
       .where(eq(this.table.productId, table.productId));
   };
 
+  getProductsByBill = async (billId: number) => {
+    const result = await this.db
+      .select()
+      .from(this.table)
+      .innerJoin(products, eq(this.table.productId, products.id))
+      .where(eq(this.table.billId, billId));
+    return result;
+  };
+
   getBillsWithProductsByZReport = async (zReportId: number) => {
     const result = await this.db
       .select()
@@ -35,6 +44,21 @@ export class BillsProductsRepository extends AbstractRepository<
       .innerJoin(bills, eq(this.table.billId, bills.id))
       .innerJoin(products, eq(this.table.productId, products.id))
       .where(eq(bills.zReportId, zReportId));
+    return result;
+  };
+
+  deleteByZReport = async (zReportId: number) => {
+    const result = await this.db
+      .delete(this.table)
+      .where(
+        eq(
+          this.table.billId,
+          this.db
+            .select({ id: bills.id })
+            .from(bills)
+            .where(eq(bills.zReportId, zReportId))
+        )
+      );
     return result;
   };
 }

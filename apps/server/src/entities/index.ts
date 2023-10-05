@@ -9,6 +9,7 @@ import { categories } from "../db/schema/categories";
 import { tables } from "../db/schema/tables";
 import { zReports } from "../db/schema/z_reports";
 import { billsProducts } from "@/db/schema/bills_products";
+import { billsSnapshots } from "@/db/schema/bills_snapshots";
 
 export type User = ClerkUser;
 export type Organization = ClerkOrganization;
@@ -33,3 +34,6 @@ export type NewTable = typeof tables.$inferInsert;
 
 export type ZReport = typeof zReports.$inferSelect;
 export type NewZReport = typeof zReports.$inferInsert;
+
+export type BillSnapshot = typeof billsSnapshots.$inferSelect;
+export type NewBillSnapshot = typeof billsSnapshots.$inferInsert;
