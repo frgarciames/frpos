@@ -4,11 +4,10 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "concurrently \"bun run dev:server\" \"bun run dev:native\" \"bun run dev:web\"",
+    "dev": "concurrently \"bun run dev:server\" \"bun run dev:pos\"",
     "dev:server": "cd apps/server && bun dev",
-    "dev:native": "cd apps/native && bun start",
-    "dev:web": "cd apps/web && bun dev",
-    "clean": "rm -rf node_modules apps/server/node_modules apps/web/node_modules apps/native/node_modules bun.lockb apps/server/bun.lockb apps/web/bun.lockb apps/native/bun.lockb"
+    "dev:pos": "cd apps/pos && bun tauri dev",
+    "clean": "rm -rf node_modules apps/server/node_modules apps/pos/node_modules  bun.lockb apps/server/bun.lockb apps/pos/bun.lockb"
   },
   "workspaces": [
     "apps/*",
@@ -16,10 +15,11 @@
   ],
   "devDependencies": {
     "@frpos/server": "workspace:*",
+    "@types/node": "^20.8.7",
     "bun-types": "latest"
   },
   "peerDependencies": {
-    "typescript": "^5.0.0"
+    "typescript": "^5.0.2"
   },
   "dependencies": {
     "concurrently": "^8.2.1"

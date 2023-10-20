@@ -12,7 +12,6 @@ type SnapshotData = {
     image: Product["image"];
     overrides: BillProduct["overrides"];
   }[];
-  totalPrice: number;
 };
 
 export const billsSnapshots = mysqlTable("bills_snapshots", {

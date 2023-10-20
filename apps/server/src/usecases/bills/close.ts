@@ -45,11 +45,6 @@ export const closeBillUsecase =
       organization,
     });
 
-    const totalPrice = products.reduce((acc, product) => {
-      const { quantity, product: originalProduct } = product;
-      return acc + (originalProduct?.price || 0) * quantity;
-    }, 0);
-
     await billsSnapshotsRepository.create({
       billId: Number(id),
       createdAt: new Date(),
@@ -59,10 +54,9 @@ export const closeBillUsecase =
           overrides,
           quantity,
         })),
-        totalPrice,
       },
     });
-    return billsRepository.getBy({
-      zReportId: existingBill.zReportId,
-    });
+    return billsProductsRepository.getBillsWithProductsByZReport(
+      existingBill.zReportId
+    );
   };
