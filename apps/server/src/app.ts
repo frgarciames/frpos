@@ -117,10 +117,13 @@ export default class Server implements Party.Server {
     // });
     connection.send(
       JSON.stringify({
-        zReport: openZReport,
-        zones,
-        categories,
-        bills,
+        usecase: "init",
+        payload: {
+          zReport: openZReport,
+          zones,
+          categories,
+          bills,
+        },
       })
     );
   }

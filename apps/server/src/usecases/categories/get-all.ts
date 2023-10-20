@@ -17,7 +17,11 @@ export const getCategoriesUsecase =
         organization: organization.id,
       });
     }
-    return await categoriesRepository.getCategoriesWithProducts(
+    const response = await categoriesRepository.getCategoriesWithProducts(
       organization.id
     );
+    return Object.entries(response).map(([key, value]) => ({
+      ...value.category,
+      products: value.products,
+    }));
   };

@@ -33,7 +33,10 @@ export const organizationUser = async (
     await clerkClient.users.getOrganizationMembershipList({
       userId: session.sub,
     });
-  const org = organizationList.find((organization) => organization.id === id);
+
+  const org = organizationList.find(
+    (organization) => organization.organization.id === id
+  );
   if (!org) return;
   return {
     organization: org,

@@ -10,8 +10,7 @@
     "clean": "rm -rf node_modules apps/server/node_modules apps/pos/node_modules  bun.lockb apps/server/bun.lockb apps/pos/bun.lockb"
   },
   "workspaces": [
-    "apps/*",
-    "packages/*"
+    "apps/*"
   ],
   "devDependencies": {
     "@frpos/server": "workspace:*",
