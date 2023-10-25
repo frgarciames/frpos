@@ -11,6 +11,7 @@ import {
 } from "@frpos/server";
 
 export class Store {
+  state: "CONNECTED" | "CONNECTING" | "DISCONNECTED" = "DISCONNECTED";
   private _organization: string | null = null;
   private _categories: Array<Category & { products: Product[] }> = [];
   private _zones: Array<Zone & { tables: Table[] }> = [];
@@ -62,15 +63,15 @@ export class Store {
   }
 
   init({ org, token }: { org: string; token: string }) {
+    this.state = "CONNECTING";
     this.organization = org;
     const conn = party.init({ org, token });
     conn?.addEventListener("close", (e) => {
-      console.log(e);
+      this.state = "DISCONNECTED";
     });
-    // conn?.addEventListener("open", (e: any) => {
-    //   console.log(e);
-    //   this.data = e.data;
-    // });
+    conn?.addEventListener("open", (e: any) => {
+      this.state = "CONNECTED";
+    });
     conn?.addEventListener("error", (e) => {
       console.log(e);
     });
@@ -81,6 +82,9 @@ export class Store {
       };
       if (data.usecase === "create_zone") {
         this.zones = data.payload;
+      }
+      if (data.usecase === "create_category") {
+        this.categories = data.payload;
       }
       if (data.usecase === "create_table") {
         const zone = this.zones.find((z) => z.id === data.payload[0].zoneId);

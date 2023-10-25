@@ -8,11 +8,18 @@ import {
 import "./globals.css";
 import { Spinner } from "./components/ui/spinner";
 import { Layout } from "./layout";
-import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom";
+import {
+  createBrowserRouter,
+  Outlet,
+  redirect,
+  RouterProvider,
+} from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { POS } from "./pages/pos";
-import { Category } from "./pages/pos/category";
+import { POSPage } from "./pages/pos";
+import { CategoryPage } from "./pages/pos/category";
 import { store } from "./lib/store";
+import { RootPage } from "./pages";
+import { rootAction } from "./pages/action";
 
 // const Data = observer(() => {
 //   if (!store.data) return <Spinner />;
@@ -140,30 +147,34 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: (
-      <Layout>
+      <RootPage>
         <Outlet />
-      </Layout>
+      </RootPage>
     ),
+    action: rootAction,
     children: [
       {
         path: "pos",
         element: (
-          <POS>
+          <POSPage>
             <Outlet />
-          </POS>
+          </POSPage>
         ),
         children: [
           {
             path: ":categoryId",
-            element: <Category />,
+            element: <CategoryPage />,
+            shouldRevalidate: () => false,
             loader: ({ params }) => {
               const { categoryId } = params;
               if (!categoryId) return [];
-              const products = store.categories.find(
+              const categoryInStore = store.categories.find(
                 (category) => category.id === Number(categoryId)
-              )?.products;
-              if (!products) return [];
-              return [...products];
+              );
+              if (!categoryInStore) {
+                return redirect("/pos");
+              }
+              return [...(categoryInStore.products || [])];
             },
           },
         ],

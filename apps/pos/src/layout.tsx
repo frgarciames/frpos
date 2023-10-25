@@ -1,8 +1,9 @@
 import { useAuth, useUser } from "@clerk/clerk-react";
 import { Button } from "./components/ui/button";
-import { Calculator, Grid3X3, LogOut } from "lucide-react";
+import { Calculator, Grid3X3, LogOut, Settings } from "lucide-react";
 import { exit } from "@tauri-apps/plugin-process";
 import {
+  Form,
   NavLink,
   useLocation,
   useNavigate,
@@ -13,14 +14,25 @@ import { observer } from "mobx-react-lite";
 import { store } from "./lib/store";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
+  DialogTrigger,
 } from "./components/ui/dialog";
 import { useEffect } from "react";
 import { Spinner } from "./components/ui/spinner";
 import { Card, CardContent, CardFooter, CardTitle } from "./components/ui/card";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "./components/ui/sheet";
+import { Input } from "./components/ui/input";
 
 export const Layout = observer(
   ({ children }: { children: React.ReactNode }) => {
@@ -41,7 +53,7 @@ export const Layout = observer(
       if (token && store.organization) {
         store.init({ org: store.organization, token });
       }
-    }, [token]);
+    }, [token, store.organization]);
     useEffect(() => {
       if (pathname === "/") {
         navigate("/pos");
@@ -58,7 +70,7 @@ export const Layout = observer(
               className="flex space-x-2"
               asChild
             >
-              <NavLink to="/">
+              <NavLink to="/pos">
                 <Calculator />
                 <span>TPV</span>
               </NavLink>
@@ -80,13 +92,49 @@ export const Layout = observer(
               frpos
             </h2>
           </div>
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={async () => await exit(0)}
-          >
-            <LogOut />
-          </Button>
+          <div>
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button variant="ghost" size="icon">
+                  <Settings />
+                </Button>
+              </SheetTrigger>
+              <SheetContent>
+                <SheetHeader>
+                  <SheetTitle>Acciones</SheetTitle>
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <Button>Nueva categoría</Button>
+                    </DialogTrigger>
+                    <DialogContent className="sm:max-w-md">
+                      <Form action="/" method="POST" className="grid gap-4">
+                        <DialogTitle>Nueva categoría</DialogTitle>
+                        <DialogDescription>
+                          <Input type="text" name="name" />
+                        </DialogDescription>
+                        <DialogFooter>
+                          <DialogClose asChild>
+                            <Button variant="ghost">Cancelar</Button>
+                          </DialogClose>
+                          <Button name="action" type="submit" value="category">
+                            Crear
+                          </Button>
+                        </DialogFooter>
+                      </Form>
+                    </DialogContent>
+                  </Dialog>
+                  <Button>Nuevo producto</Button>
+                </SheetHeader>
+              </SheetContent>
+            </Sheet>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={async () => await exit(0)}
+            >
+              <LogOut />
+            </Button>
+          </div>
         </header>
         <main className="flex-1">
           {!store.organization ? (
@@ -127,6 +175,8 @@ export const Layout = observer(
                 </div>
               </DialogContent>
             </Dialog>
+          ) : store.state === "CONNECTING" ? (
+            <Spinner />
           ) : (
             children
           )}

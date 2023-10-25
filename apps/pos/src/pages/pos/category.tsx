@@ -1,7 +1,7 @@
 import { Product } from "@frpos/server";
 import { useLoaderData } from "react-router-dom";
 
-export const Category = () => {
+export const CategoryPage = () => {
   const products = useLoaderData() as Product[];
   console.log(products);
   return (

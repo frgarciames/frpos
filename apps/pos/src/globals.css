@@ -86,5 +86,5 @@
   @apply border-t-neutral-500;
 }
 a.active {
-  @apply bg-slate-100;
+  @apply bg-slate-100/80;
 }
