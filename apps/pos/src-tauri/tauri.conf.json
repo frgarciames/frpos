@@ -16,6 +16,7 @@
     }
   },
   "tauri": {
+    "macOSPrivateApi": true,
     "bundle": {
       "active": true,
       "icon": [
@@ -33,7 +34,7 @@
     },
     "windows": [
       {
-        "fullscreen": false,
+        "maximized": true,
         "title": "frpos-desktop"
       }
     ]

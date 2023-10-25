@@ -21,6 +21,7 @@
     "typescript": "^5.0.2"
   },
   "dependencies": {
+    "@radix-ui/react-separator": "^1.0.3",
     "concurrently": "^8.2.1"
   }
 }

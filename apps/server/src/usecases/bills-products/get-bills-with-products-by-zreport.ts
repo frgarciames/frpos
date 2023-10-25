@@ -38,5 +38,8 @@ export const getBillsWithProductsByZReportUsecase =
       }
       return acc;
     }, {});
-    return result;
+    return Object.values(result).map(({ bill, products }) => ({
+      ...bill,
+      products,
+    }));
   };

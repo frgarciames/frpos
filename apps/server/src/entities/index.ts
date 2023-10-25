@@ -37,3 +37,5 @@ export type NewZReport = typeof zReports.$inferInsert;
 
 export type BillSnapshot = typeof billsSnapshots.$inferSelect;
 export type NewBillSnapshot = typeof billsSnapshots.$inferInsert;
+
+export { Usecase } from "../usecases";

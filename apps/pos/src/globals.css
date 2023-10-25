@@ -85,3 +85,6 @@
   box-sizing: border-box;
   @apply border-t-neutral-500;
 }
+a.active {
+  @apply bg-slate-100;
+}

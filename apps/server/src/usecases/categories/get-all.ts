@@ -20,8 +20,8 @@ export const getCategoriesUsecase =
     const response = await categoriesRepository.getCategoriesWithProducts(
       organization.id
     );
-    return Object.entries(response).map(([key, value]) => ({
-      ...value.category,
-      products: value.products,
+    return Object.values(response).map(({ category, products }) => ({
+      ...category,
+      products,
     }));
   };

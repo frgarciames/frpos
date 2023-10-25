@@ -16,7 +16,7 @@ import { getBillsWithProductsByZReportUsecase } from "./usecases/bills-products/
 import { getOpenZReportUsecase } from "./usecases/z-reports/get-open";
 
 const defaultHeaders = {
-  "Access-Control-Allow-Origin": "http://localhost:5173",
+  "Access-Control-Allow-Origin": "http://localhost:1420",
   "Access-Control-Allow-Headers": "Content-Type, Authorization",
   "Access-Control-Allow-Credentials": "true",
   "Access-Control-Allow-Methods": "GET, POST, DELETE, PATCH, OPTIONS",

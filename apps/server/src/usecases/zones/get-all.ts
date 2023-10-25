@@ -18,8 +18,8 @@ export const getZonesUsecase =
       });
     }
     const response = await zonesRepository.getZonesWithTables(organization.id);
-    return Object.entries(response).map(([key, value]) => ({
-      ...value.zone,
-      tables: value.tables,
+    return Object.values(response).map(({ zone, tables }) => ({
+      ...zone,
+      tables,
     }));
   };

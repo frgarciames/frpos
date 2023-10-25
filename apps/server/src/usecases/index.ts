@@ -105,4 +105,5 @@ export type Usecase =
   | GetUsecases
   | PostUsecases
   | PatchUsecases
-  | PutUsecases;
+  | PutUsecases
+  | "init";
