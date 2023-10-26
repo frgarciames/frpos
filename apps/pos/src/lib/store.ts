@@ -86,6 +86,22 @@ export class Store {
       if (data.usecase === "create_category") {
         this.categories = data.payload;
       }
+      if (data.usecase === "create_product") {
+        const category = this.categories.find(
+          (z) => z.id === data.payload[0].categoryId
+        );
+        if (!category) return;
+        const newCategories = this.categories.map((z) => {
+          if (z.id === category.id) {
+            return {
+              ...z,
+              products: data.payload,
+            };
+          }
+          return z;
+        });
+        this.categories = newCategories;
+      }
       if (data.usecase === "create_table") {
         const zone = this.zones.find((z) => z.id === data.payload[0].zoneId);
         if (!zone) return;

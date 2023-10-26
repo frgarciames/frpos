@@ -1,10 +1,10 @@
-import { NewCategory, Usecase } from "@frpos/server";
+import { NewProduct, Usecase } from "@frpos/server";
 
-export const createCategory = async (
-  payload: NewCategory,
+export const createProduct = async (
+  payload: NewProduct,
   organizationId: string
 ) => {
-  const usecase: Usecase = "create_category";
+  const usecase: Usecase = "create_product";
   try {
     const res = await fetch(
       `http://localhost:1999/parties/main/${organizationId}`,

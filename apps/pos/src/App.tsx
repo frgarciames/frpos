@@ -20,6 +20,7 @@ import { CategoryPage } from "./pages/pos/category";
 import { store } from "./lib/store";
 import { RootPage } from "./pages";
 import { rootAction } from "./pages/action";
+import { Toaster } from "./components/ui/toaster";
 
 // const Data = observer(() => {
 //   if (!store.data) return <Spinner />;
@@ -164,7 +165,6 @@ const router = createBrowserRouter([
           {
             path: ":categoryId",
             element: <CategoryPage />,
-            shouldRevalidate: () => false,
             loader: ({ params }) => {
               const { categoryId } = params;
               if (!categoryId) return [];
@@ -203,6 +203,7 @@ function App() {
         </SignedOut>
         <SignedIn>
           <QueryClientProvider client={queryClient}>
+            <Toaster />
             <RouterProvider router={router} fallbackElement={<Spinner />} />
           </QueryClientProvider>
         </SignedIn>
