@@ -80,6 +80,7 @@ export default class Server implements Party.Server {
     const openZReport = await getOpenZReportUsecase(this.repositories)({
       organization: userInOrganization.organization.organization,
       user: userInOrganization.user,
+      payload: {},
     });
     if (!openZReport) {
       connection.send(
@@ -90,6 +91,7 @@ export default class Server implements Party.Server {
       return;
     }
     const categories = await getCategoriesUsecase(this.repositories)({
+      payload: {},
       organization: userInOrganization.organization.organization,
       nested: true,
       user: userInOrganization.user,
@@ -98,6 +100,7 @@ export default class Server implements Party.Server {
       organization: userInOrganization.organization.organization,
       nested: true,
       user: userInOrganization.user,
+      payload: {},
     });
     const bills = await getBillsWithProductsByZReportUsecase({
       billsProductsRepository: this.repositories.billsProductsRepository,
@@ -105,6 +108,9 @@ export default class Server implements Party.Server {
       organization: userInOrganization.organization.organization,
       user: userInOrganization.user,
       zReportId: openZReport.id,
+      payload: {
+        zReportId: openZReport.id,
+      },
     });
     // const zones = await getZonesUsecase(this.repositories)({
     //   organization: userInOrganization.organization.organization,
@@ -171,8 +177,8 @@ export default class Server implements Party.Server {
     const { fn, needsToBroadcast } = methodUsecase[usecase];
     try {
       const result = await fn(this.repositories)({
-        ...payload,
         ...userInOrganization.organization,
+        payload,
         user: userInOrganization.user,
       });
 

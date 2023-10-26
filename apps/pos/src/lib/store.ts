@@ -86,7 +86,10 @@ export class Store {
       if (data.usecase === "create_category") {
         this.categories = data.payload;
       }
-      if (data.usecase === "create_product") {
+      if (
+        data.usecase === "create_product" ||
+        data.usecase === "update_product"
+      ) {
         const category = this.categories.find(
           (z) => z.id === data.payload[0].categoryId
         );

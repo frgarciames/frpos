@@ -10,18 +10,18 @@ type CategoriesRepositoryProps = {
 type CreateCategoryInput = InputUsecase<NewCategory>;
 export const createCategoryUsecase =
   ({ categoriesRepository }: CategoriesRepositoryProps) =>
-  async ({ organization, name, user }: CreateCategoryInput) => {
+  async ({ organization, payload, user }: CreateCategoryInput) => {
     if (!organization) throw OrganizationNotFoundError();
     const existingCategory = await categoriesRepository.getBy({
       organization: organization.id,
-      name,
+      name: payload.name,
     });
     if (existingCategory.length > 0) {
-      throw AlreadyExistsError("Category", name);
+      throw AlreadyExistsError("Category", payload.name);
     }
     await categoriesRepository.create({
       organization: organization.id,
-      name,
+      name: payload.name,
       createdBy: user.id,
     });
     return categoriesRepository.getBy({

@@ -87,7 +87,7 @@ export const Layout = observer(
             </Button>
           </div>
         </header>
-        <main className="flex-1 flex">
+        <main className="flex-1 flex w-full">
           {!store.organization ? (
             <Dialog open>
               <DialogContent withClose={false} className="sm:max-w-md">
@@ -117,7 +117,7 @@ export const Layout = observer(
                             alt=""
                           />
                         </CardContent>
-                        <CardFooter className="p-2">
+                        <CardFooter className="p-4">
                           <CardTitle>{organization.name}</CardTitle>
                         </CardFooter>
                       </Card>

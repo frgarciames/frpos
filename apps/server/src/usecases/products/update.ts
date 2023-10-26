@@ -10,30 +10,24 @@ type ProductsRepositoryProps = {
 type UpdateProductInput = InputUsecase<Product>;
 export const updateProductUsecase =
   ({ productsRepository }: ProductsRepositoryProps) =>
-  async ({
-    organization,
-    name,
-    user,
-    id,
-    categoryId,
-    ...productProps
-  }: UpdateProductInput) => {
+  async ({ organization, user, payload: product }: UpdateProductInput) => {
     if (!organization) throw OrganizationNotFoundError();
     const existingProduct = await productsRepository.getBy({
-      categoryId,
-      name,
+      categoryId: Number(product.categoryId),
+      name: product.name,
     });
-    if (existingProduct.length > 0) {
-      throw AlreadyExistsError("Product", name);
+    if (
+      existingProduct.length > 0 &&
+      existingProduct[0].id !== Number(product.id)
+    ) {
+      throw AlreadyExistsError("Product", product.name);
     }
     await productsRepository.update({
-      ...productProps,
-      id: Number(id),
-      name,
+      ...product,
       updatedAt: new Date(),
       updatedBy: user.id,
     });
     return productsRepository.getBy({
-      categoryId,
+      categoryId: Number(product.categoryId),
     });
   };

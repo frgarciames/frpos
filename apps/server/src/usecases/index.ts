@@ -41,7 +41,8 @@ import {
   POST_BILLS_PRODUCTS_USECASES,
 } from "./bills-products";
 
-export type InputUsecase<T> = Omit<T, "organization"> & {
+export type InputUsecase<T> = T & {
+  payload: T;
   user: User;
   organization: Organization;
 };

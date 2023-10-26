@@ -51,7 +51,7 @@ export const NewCategory = ({ onSuccess }: NewCategoryProps) => {
               disabled={state === "submitting"}
               name="action"
               type="submit"
-              value="category"
+              value="create_category"
             >
               {state === "submitting" ? "Creando..." : "Crear"}
             </Button>

@@ -27,7 +27,7 @@ const CategoriesList = observer(() => {
     );
   }
   return (
-    <div className="flex space-x-4">
+    <div className="flex space-x-4 py-4 overflow-auto">
       {categories.map((category) => (
         <Button
           key={category.id}
@@ -117,10 +117,10 @@ const Calculator = () => {
 
 export const POSPage = ({ children }: { children?: ReactNode }) => {
   return (
-    <div className="p-4 flex flex-col flex-1">
+    <div className="p-4 pt-0 flex flex-col flex-1 w-full">
       <CategoriesList />
-      <div className="flex space-x-4 mt-4 flex-1">
-        <div className="w-[75%]">{children}</div>
+      <div className="flex space-x-4 flex-1">
+        <div className="w-[75%] relative">{children}</div>
         <div className="w-[25%]">
           <Calculator />
         </div>

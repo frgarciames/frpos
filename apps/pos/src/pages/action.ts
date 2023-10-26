@@ -1,21 +1,22 @@
 import { store } from "@/lib/store";
 import { createCategory } from "@/services/category";
-import { createProduct } from "@/services/product";
+import { createProduct, updateProduct } from "@/services/product";
 import { ActionFunction } from "react-router-dom";
 
 const ACTION_SERVICE = {
-  category: createCategory,
-  product: createProduct,
+  create_category: createCategory,
+  create_product: createProduct,
+  update_product: updateProduct,
 };
 
 export const rootAction: ActionFunction = async ({ request }) => {
   if (!store.organization) return {};
   const formData = await request.formData();
   const entries = Object.fromEntries(formData.entries());
-  const { action } = entries;
+  const { action, ...payload } = entries;
   try {
     await ACTION_SERVICE[action as keyof typeof ACTION_SERVICE](
-      entries as any,
+      payload as any,
       store.organization
     );
     return {

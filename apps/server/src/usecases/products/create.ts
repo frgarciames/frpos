@@ -11,17 +11,12 @@ type ProductsRepositoryProps = {
 type CreateProductInput = InputUsecase<NewProduct>;
 export const createProductUsecase =
   ({ productsRepository }: ProductsRepositoryProps) =>
-  async ({
-    organization,
-    name,
-    categoryId,
-    price,
-    user,
-  }: CreateProductInput) => {
+  async ({ organization, payload, user }: CreateProductInput) => {
     if (!organization) throw OrganizationNotFoundError();
+    const { categoryId, name, price } = payload;
     if (!categoryId || !name) throw MissingParamsError({ categoryId, name });
     const existingProduct = await productsRepository.getBy({
-      categoryId,
+      categoryId: Number(categoryId),
       name,
     });
     if (existingProduct.length > 0) {
@@ -29,12 +24,12 @@ export const createProductUsecase =
     }
 
     await productsRepository.create({
-      categoryId,
+      categoryId: Number(categoryId),
       name,
-      price,
+      price: Number(price),
       createdBy: user.id,
     });
     return productsRepository.getBy({
-      categoryId,
+      categoryId: Number(categoryId),
     });
   };
